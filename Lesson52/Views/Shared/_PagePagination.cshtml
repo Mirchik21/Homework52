@@ -1,0 +1,39 @@
+﻿
+
+<nav aria-label="...">
+    <ul class="pagination">
+        @if (Model.PageViewModel.HasPreviosPage)
+        {
+            int prevPage = @Model.PageViewModel.PageNumber - 1;
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@prevPage" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            for (int i = 1; i < Model.PageViewModel.PageNumber; i++)
+            {
+                <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@i">@i</a></li>
+            }
+
+        }
+        
+       
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">@Model.PageViewModel.PageNumber<span class="sr-only">(current)</span></a>
+        </li>
+       
+        
+        @if (Model.PageViewModel.HasNextPage)
+        {
+           
+            for (int i = Model.PageViewModel.PageNumber + 1; i <= Model.PageViewModel.TotalPages; i++)
+            {
+                <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@i">@i</a></li>
+            }
+
+            int nextPage = @Model.PageViewModel.PageNumber + 1;
+            <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-route-page="@nextPage">Next</a>
+            </li>
+        }
+       
+    </ul>
+</nav>

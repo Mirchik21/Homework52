@@ -1,0 +1,136 @@
+﻿@model Lesson52.ViewModels.PhoneListViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<form method="get">
+    <div class="form-inline form-group">
+        <div class="form-row">
+            <div class="col">
+                @Html.TextBox("name", Model.Name, htmlAttributes: new {@class = "form-control", @placeholder = "Name"})
+            </div>
+            <div class="col">
+                @Html.TextBox("priceFrom", Model.PriceFrom, htmlAttributes: new {@class = "form-control", @placeholder = "PriceFrom"})
+            </div>
+            <div class="col">
+                @Html.TextBox("priceTo", Model.PriceTo, htmlAttributes: new {@class = "form-control", @placeholder = "PriceTo"})
+            </div>
+            <div class="col">
+                @Html.DropDownList("Company", Model.Companies as SelectList, htmlAttributes: new {@class = "form-control"})
+            </div>
+        </div>
+        <input type="submit" value="Filter" class="btn btn-default" />
+    </div>
+</form>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort"> Name </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSort"> Price </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.CompanySort"> Company </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.ReviewSort"> ReviewGrades </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Phones) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.Name)
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.Review.Grade)
+             </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<nav aria-label="...">
+    <ul class="pagination">
+        @if (Model.PageViewModel.HasPreviosPage)
+        {
+            int prevPage = @Model.PageViewModel.PageNumber - 1;
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@prevPage"
+                       asp-route-sortOrder="@Context.Request.Query["sortOrder"]"
+                       asp-route-name="@Context.Request.Query["name"]"
+                       asp-route-priceFrom="@Context.Request.Query["priceFrom"]"
+                       asp-route-priceTo="@Context.Request.Query["priceTo"]"
+                       asp-route-company="@Context.Request.Query["company"]">Previous</a>
+            </li>
+            for (int i = 1; i < Model.PageViewModel.PageNumber; i++)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i"
+                       asp-route-sortOrder="@Context.Request.Query["sortOrder"]"
+                       asp-route-name="@Context.Request.Query["name"]"
+                       asp-route-priceFrom="@Context.Request.Query["priceFrom"]"
+                       asp-route-priceTo="@Context.Request.Query["priceTo"]"
+                       asp-route-company="@Context.Request.Query["company"]">@i</a>
+                </li>
+            }
+
+        }
+
+
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">@Model.PageViewModel.PageNumber<span class="sr-only">(current)</span></a>
+        </li>
+
+
+        @if (Model.PageViewModel.HasNextPage)
+        {
+
+            for (int i = Model.PageViewModel.PageNumber + 1; i <= Model.PageViewModel.TotalPages; i++)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i"
+                       asp-route-sortOrder="@Context.Request.Query["sortOrder"]"
+                       asp-route-name="@Context.Request.Query["name"]"
+                       asp-route-priceFrom="@Context.Request.Query["priceFrom"]"
+                       asp-route-priceTo="@Context.Request.Query["priceTo"]"
+                       asp-route-company="@Context.Request.Query["company"]">@i</a>
+                </li>
+            }
+
+            int nextPage = @Model.PageViewModel.PageNumber + 1;
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@nextPage"
+                       asp-route-sortOrder="@Context.Request.Query["sortOrder"]"
+                       asp-route-name="@Context.Request.Query["name"]"
+                       asp-route-priceFrom="@Context.Request.Query["priceFrom"]"
+                       asp-route-priceTo="@Context.Request.Query["priceTo"]"
+                       asp-route-company="@Context.Request.Query["company"]">Next</a>
+            </li>
+        }
+
+    </ul>
+</nav>
+
+
